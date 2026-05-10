@@ -1,2 +1,693 @@
-# madaenergies
-madaEnergy
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Dimensionneur solaire Madagascar - Mobile</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9f5f0 0%, #d4e9e0 100%);
+            margin: 0;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 1.8rem;
+            box-shadow: 0 8px 20px rgba(0, 20, 0, 0.1);
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e4a2f;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0 0 4px 0;
+        }
+        h1 small {
+            font-size: 0.7rem;
+            background: #e0f0e6;
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            white-space: nowrap;
+        }
+        .sous-titre {
+            font-size: 0.8rem;
+            margin: 0 0 1.2rem 0;
+            color: #2b5e3b;
+            border-left: 3px solid #3b9b5e;
+            padding-left: 0.7rem;
+        }
+        .grille-panels {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .section-appareils, .section-params {
+            background: #ffffffdd;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .section-appareils {
+            background: #fefcf5;
+        }
+        .section-params {
+            background: #fefce8;
+        }
+        h3 {
+            font-size: 1.2rem;
+            margin: 0 0 0.8rem 0;
+            color: #1e4a2f;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0.5rem 0 0.5rem 0;
+            border-radius: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            min-width: 500px;
+        }
+        th, td {
+            padding: 8px 6px;
+            text-align: left;
+            border-bottom: 1px solid #cbdcd0;
+        }
+        th {
+            background-color: #dff0e6;
+            font-weight: 600;
+            color: #1e4620;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px 8px;
+            border-radius: 14px;
+            border: 1px solid #becfc2;
+            background: white;
+            font-size: 0.85rem;
+            transition: 0.1s;
+        }
+        .btn-ajouter, .btn-calc, .btn-pdf, .btn-lang {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #2c7840;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        .btn-ajouter {
+            background: #2c7840;
+            width: auto;
+            padding: 8px 18px;
+            margin-top: 0;
+        }
+        .btn-calc {
+            background: #f5a623;
+            color: #2c2c2c;
+            margin-top: 20px;
+        }
+        .btn-pdf {
+            background: #ba5624;
+            width: auto;
+            margin-top: 0;
+            padding: 10px 16px;
+        }
+        .btn-lang {
+            background: #1e6f5c;
+            width: auto;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            margin-top: 0;
+        }
+        .btn-supprimer {
+            background: none;
+            border: none;
+            color: #b3413a;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0 6px;
+            font-weight: bold;
+        }
+        .flex-boutons-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .param-groupe {
+            margin-bottom: 1rem;
+        }
+        .param-groupe label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+            color: #245e36;
+            font-size: 0.85rem;
+        }
+        .help-text {
+            font-size: 0.65rem;
+            color: #466b51;
+            margin-top: 3px;
+        }
+        .carte-resultat {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            margin: 0.8rem 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        .badge {
+            background: #2c7a47;
+            color: white;
+            border-radius: 50px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .total-energie {
+            background: #d9e8db;
+            padding: 10px;
+            border-radius: 28px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        .footer-uni {
+            margin-top: 1.8rem;
+            text-align: center;
+            font-size: 0.7rem;
+            border-top: 1px solid #caddd1;
+            padding-top: 1rem;
+            color: #2d5e3b;
+        }
+        .flex-boutons {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 550px) {
+            body {
+                padding: 6px;
+            }
+            .container {
+                padding: 0.8rem;
+                border-radius: 1.2rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .btn-ajouter {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+            input, select {
+                font-size: 0.8rem;
+                padding: 7px 6px;
+            }
+            .carte-resultat {
+                padding: 0.7rem;
+            }
+            table {
+                font-size: 0.7rem;
+                min-width: 420px;
+            }
+            th, td {
+                padding: 6px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+    <div class="flex-boutons-top">
+        <h1>🌞 Mada-Soa <small>Ariary & mobile</small></h1>
+        <button id="btnTraduction" class="btn-lang">🇲🇬 Malagasy</button>
+    </div>
+    <div class="sous-titre" id="sousTitre">Ajoutez vos appareils → dimensionnement complet panneaux, batteries (5Ah-300Ah) et devis en Ariary.</div>
+
+    <div class="grille-panels">
+        <div class="section-appareils">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <h3 id="titreAppareils">📋 Vos appareils</h3>
+                <button type="button" class="btn-ajouter" id="ajouterAppareilBtn">+ Ajouter</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="tableAppareils">
+                    <thead>
+                        <tr><th id="thType">Type</th><th id="thNom">Nom</th><th id="thPuissance">W</th><th id="thQte">Qté</th><th id="thHeures">h/j</th><th></th></tr>
+                    </thead>
+                    <tbody id="tbodyAppareils"></tbody>
+                </table>
+            </div>
+            <div class="help-text" id="helpAppareils">💡 Choisissez un type, la puissance par défaut est proposée.</div>
+        </div>
+
+        <div class="section-params">
+            <h3 id="titreParams">⚙️ Réglages & Prix (Ar)</h3>
+            <div class="param-groupe">
+                <label id="labelEnsoleillement">☀️ Heures d'ensoleillement (Madagascar)</label>
+                <input type="number" id="peakSunHours" value="5.2" step="0.2">
+                <div class="help-text" id="helpEnsoleillement">Moyenne 5,2 h/jour</div>
+            </div>
+            <div class="param-groupe">
+                <label id="labelAutonomie">🔋 Jours d'autonomie</label>
+                <input type="number" id="autonomyDays" value="2" step="0.5" min="1">
+            </div>
+            <div class="param-groupe">
+                <label id="labelTechno">⚡ Technologie batterie (DOD)</label>
+                <select id="batteryType">
+                    <option value="0.5">Plomb-acide 50%</option>
+                    <option value="0.8" selected>Lithium 80%</option>
+                    <option value="0.6">Gel/AGM 60%</option>
+                </select>
+            </div>
+            <div class="param-groupe">
+                <label id="labelTension">🔧 Tension système (V)</label>
+                <select id="systemVoltage"><option value="12">12V</option><option value="24">24V</option><option value="48">48V</option></select>
+            </div>
+            <div class="param-groupe">
+                <label id="labelEfficacite">📉 Facteur d'efficacité</label>
+                <input type="number" id="systemEfficiency" value="0.75" step="0.01">
+            </div>
+            <div class="param-groupe">
+                <label id="labelCapaciteBatterie">🪫 Capacité batterie 12V (Ah)</label>
+                <select id="batteryAhSelect" onchange="toggleBatteryAh()">
+                    <option value="5">5 Ah</option><option value="10">10 Ah</option><option value="20">20 Ah</option>
+                    <option value="50">50 Ah</option><option value="100" selected>100 Ah</option><option value="150">150 Ah</option>
+                    <option value="200">200 Ah</option><option value="300">300 Ah</option>
+                    <option value="other">Autre</option>
+                </select>
+                <input type="number" id="batteryAhOther" style="display:none; margin-top:5px;" placeholder="Capacité (Ah)" value="100">
+                <div class="help-text" id="helpBatterie">De 5Ah (éclairage) à 300Ah.</div>
+            </div>
+            <div class="param-groupe">
+                <label id="labelPrixBatterie">💰 Prix unitaire batterie (Ar)</label>
+                <input type="number" id="prixBatterie" value="550000" step="10000">
+            </div>
+            <div class="param-groupe">
+                <label id="labelPuissancePanneau">🔌 Puissance panneau (Wc)</label>
+                <select id="panelWattageSelect" onchange="togglePanelWattage()">
+                    <option value="100">100 Wc</option><option value="150">150 Wc</option><option value="250">250 Wc</option>
+                    <option value="300">300 Wc</option><option value="400" selected>400 Wc</option><option value="450">450 Wc</option>
+                    <option value="500">500 Wc</option><option value="other">Autre</option>
+                </select>
+                <input type="number" id="panelWattageOther" style="display:none; margin-top:5px;" placeholder="Wc" value="400">
+                <div class="help-text" id="helpPanneau">Choisissez puissance disponible.</div>
+            </div>
+            <div class="param-groupe">
+                <label id="labelPrixPanneau">💰 Prix panneau (Ar)</label>
+                <input type="number" id="prixPanneau" value="350000" step="10000">
+            </div>
+            <div class="param-groupe">
+                <label id="labelPrixAccessoires">🛠️ Forfait accessoires (Ar)</label>
+                <input type="number" id="prixAccessoires" value="0" step="50000">
+            </div>
+            <button id="calculerBtn" class="btn-calc">📐 DIMENSIONNER & DEVIS</button>
+        </div>
+    </div>
+
+    <div id="resultatsSection" class="section-resultats" style="margin-top: 1.2rem;">
+        <div class="flex-boutons">
+            <h3 id="titreResultats" style="margin:0; font-size:1rem;">📊 Résultats & Devis</h3>
+            <button id="exportPdfBtn" class="btn-pdf">📑 PDF</button>
+        </div>
+        <div id="resultatsContenu" class="carte-resultat">
+            <p id="msgInit">⚡ Cliquez sur "Dimensionner & Devis".</p>
+        </div>
+    </div>
+
+    <div class="footer-uni" id="footerText">
+        🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium
+    </div>
+</div>
+
+<script>
+    // ----- fonctions utilitaires -----
+    function toggleBatteryAh() {
+        const s = document.getElementById('batteryAhSelect');
+        const other = document.getElementById('batteryAhOther');
+        other.style.display = s.value === 'other' ? 'block' : 'none';
+    }
+    function getBatteryAh() {
+        const s = document.getElementById('batteryAhSelect');
+        if (s.value === 'other') return parseFloat(document.getElementById('batteryAhOther').value) || 100;
+        return parseFloat(s.value);
+    }
+    function togglePanelWattage() {
+        const s = document.getElementById('panelWattageSelect');
+        const o = document.getElementById('panelWattageOther');
+        o.style.display = s.value === 'other' ? 'block' : 'none';
+    }
+    function getPanelWattage() {
+        const s = document.getElementById('panelWattageSelect');
+        if (s.value === 'other') return parseFloat(document.getElementById('panelWattageOther').value) || 400;
+        return parseFloat(s.value);
+    }
+    toggleBatteryAh(); togglePanelWattage();
+    document.getElementById('batteryAhSelect').addEventListener('change', toggleBatteryAh);
+    document.getElementById('panelWattageSelect').addEventListener('change', togglePanelWattage);
+
+    // ----- dictionnaire des appareils -----
+    const defaultApplianceMap = {
+        "Lampe LED": { power: 9, name: "Lampe LED" }, "Téléviseur LCD": { power: 80, name: "TV LCD" },
+        "Réfrigérateur": { power: 150, name: "Réfrigérateur" }, "Congélateur": { power: 200, name: "Congélateur" },
+        "Ordinateur portable": { power: 50, name: "PC portable" }, "Ordinateur fixe": { power: 200, name: "PC fixe" },
+        "Machine à laver": { power: 500, name: "Lave-linge" }, "Micro-ondes": { power: 900, name: "Micro-ondes" },
+        "Cafetière": { power: 800, name: "Cafetière" }, "Ventilateur": { power: 45, name: "Ventilateur" },
+        "Climatiseur": { power: 1000, name: "Climatiseur" }, "Pompe à eau": { power: 400, name: "Pompe eau" },
+        "Chargeur tel": { power: 5, name: "Chargeur tel" }, "Routeur": { power: 12, name: "Routeur" },
+        "Petite radio": { power: 3, name: "Radio" }
+    };
+    const tbody = document.getElementById('tbodyAppareils');
+
+    function createRow(selectedType = "Lampe LED", customName = null, powerVal = null, qty = 1, hours = 2) {
+        const tr = document.createElement('tr');
+        const tdSelect = document.createElement('td');
+        const select = document.createElement('select');
+        select.className = "type-select";
+        for (let k of Object.keys(defaultApplianceMap)) {
+            let opt = document.createElement('option');
+            opt.value = k;
+            opt.textContent = k;
+            if (k === selectedType) opt.selected = true;
+            select.appendChild(opt);
+        }
+        tdSelect.appendChild(select);
+        
+        const tdName = document.createElement('td');
+        const nameInput = document.createElement('input');
+        nameInput.type = "text";
+        nameInput.placeholder = "Nom";
+        nameInput.className = "app-name";
+        let dispName = (customName !== null && customName !== "") ? customName : defaultApplianceMap[selectedType]?.name || selectedType;
+        nameInput.value = dispName;
+        tdName.appendChild(nameInput);
+        
+        const tdPower = document.createElement('td');
+        const pInp = document.createElement('input');
+        pInp.type = "number";
+        pInp.className = "power-w";
+        let defPow = (powerVal !== null) ? powerVal : (defaultApplianceMap[selectedType]?.power || 50);
+        pInp.value = defPow;
+        tdPower.appendChild(pInp);
+        
+        const tdQty = document.createElement('td');
+        const qInp = document.createElement('input');
+        qInp.type = "number";
+        qInp.value = qty;
+        qInp.min = 1;
+        qInp.className = "qty";
+        tdQty.appendChild(qInp);
+        
+        const tdHours = document.createElement('td');
+        const hInp = document.createElement('input');
+        hInp.type = "number";
+        hInp.value = hours;
+        hInp.min = 0;
+        hInp.step = 0.5;
+        hInp.className = "hours";
+        tdHours.appendChild(hInp);
+        
+        const tdDel = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.textContent = "✖";
+        delBtn.className = "btn-supprimer";
+        delBtn.onclick = () => tr.remove();
+        tdDel.appendChild(delBtn);
+        
+        tr.append(tdSelect, tdName, tdPower, tdQty, tdHours, tdDel);
+        
+        select.addEventListener('change', (e) => {
+            const newType = e.target.value;
+            const def = defaultApplianceMap[newType];
+            if (def) {
+                pInp.value = def.power;
+                const currName = nameInput.value.trim();
+                let prevType = select.options[select.selectedIndex]?.text;
+                let oldDefault = defaultApplianceMap[prevType]?.name || prevType;
+                if (currName === "" || currName === oldDefault || currName === "Nouvel appareil") {
+                    nameInput.value = def.name;
+                }
+            }
+        });
+        return tr;
+    }
+    
+    function initTable() {
+        tbody.innerHTML = '';
+        tbody.appendChild(createRow("Lampe LED", null, 9, 2, 5));
+        tbody.appendChild(createRow("Chargeur tel", null, 5, 1, 4));
+        tbody.appendChild(createRow("Téléviseur LCD", null, 80, 1, 4));
+    }
+    
+    function getAppareils() {
+        let rows = tbody.querySelectorAll('tr');
+        let arr = [];
+        for (let r of rows) {
+            let p = r.querySelector('.power-w')?.value;
+            let q = r.querySelector('.qty')?.value;
+            let h = r.querySelector('.hours')?.value;
+            let n = r.querySelector('.app-name')?.value;
+            if (p && q && h) {
+                let pw = parseFloat(p), qt = parseFloat(q), hr = parseFloat(h);
+                if (pw > 0 && qt > 0 && hr > 0) arr.push({ nom: n || '?', puissance: pw, quantite: qt, heures: hr });
+            }
+        }
+        return arr;
+    }
+    
+    // ----- Traduction (Français/Malgache) -----
+    let langueActuelle = 'fr';
+    const dict = {
+        fr: {
+            sousTitre: "Ajoutez vos appareils → panneaux, batteries (5Ah-300Ah) et devis en Ariary.",
+            titreAppareils: "📋 Vos appareils", btnAjouter: "+ Ajouter", thType: "Type", thNom: "Nom", thPuissance: "W", thQte: "Qté", thHeures: "h/j", helpAppareils: "💡 Choisissez un type, la puissance par défaut est proposée.",
+            titreParams: "⚙️ Réglages & Prix (Ar)", labelEnsoleillement: "☀️ Heures d'ensoleillement (Madagascar)", helpEnsoleillement: "Moyenne 5,2 h/jour",
+            labelAutonomie: "🔋 Jours d'autonomie", labelTechno: "⚡ Technologie batterie (DOD)", labelTension: "🔧 Tension système (V)", labelEfficacite: "📉 Facteur d'efficacité",
+            labelCapaciteBatterie: "🪫 Capacité batterie 12V (Ah)", helpBatterie: "De 5Ah (éclairage) à 300Ah.", labelPrixBatterie: "💰 Prix unitaire batterie (Ar)",
+            labelPuissancePanneau: "🔌 Puissance panneau (Wc)", helpPanneau: "Choisissez puissance disponible.", labelPrixPanneau: "💰 Prix panneau (Ar)",
+            labelPrixAccessoires: "🛠️ Forfait accessoires (Ar)", btnCalc: "📐 DIMENSIONNER & DEVIS", titreResultats: "📊 Résultats & Devis", msgInit: "⚡ Cliquez sur 'Dimensionner & Devis'.",
+            btnPdf: "📑 PDF", btnLang: "🇲🇬 Malagasy", footer: "🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium"
+        },
+        mg: {
+            sousTitre: "Ampidiro ny fitaovana → kajy panneau, batterie (5Ah-300Ah) ary vidiny amin'ny Ariary.",
+            titreAppareils: "📋 Ireo fitaovanao", btnAjouter: "+ Ampiana", thType: "Karazana", thNom: "Anarana", thPuissance: "W", thQte: "Isany", thHeures: "ora/andro", helpAppareils: "💡 Mifidiana karazana, hiseho ny herinaratra.",
+            titreParams: "⚙️ Fandrindrana sy Vidin (Ar)", labelEnsoleillement: "☀️ Ora mamirapiratra (Madagasikara)", helpEnsoleillement: "Anton-daty 5,2 ora",
+            labelAutonomie: "🔋 Andro fitehirizana", labelTechno: "⚡ Karazana batterie (DOD)", labelTension: "🔧 Hery (V)", labelEfficacite: "📉 Fahombiazana",
+            labelCapaciteBatterie: "🪫 Fahafahan'ny batterie 12V (Ah)", helpBatterie: "5Ah ka 300Ah.", labelPrixBatterie: "💰 Vidin'ny batterie (Ar)",
+            labelPuissancePanneau: "🔌 Herin'ny panneau (Wc)", helpPanneau: "Misafidiana hery misy.", labelPrixPanneau: "💰 Vidin'ny panneau (Ar)",
+            labelPrixAccessoires: "🛠️ Vidin'ny kojakoja (Ar)", btnCalc: "📐 KAJIANA", titreResultats: "📊 Valiny sy Vidiny", msgInit: "⚡ Tsindrio ny 'Kajiana'.",
+            btnPdf: "📑 PDF", btnLang: "🇫🇷 Français", footer: "🌱 Oniversiten'i Itasy - Mention Energie Renouvelable - Dr Andy Marlonium"
+        }
+    };
+    
+    function traduireInterface() {
+        let t = dict[langueActuelle];
+        if (!t) return;
+        document.getElementById('sousTitre').innerText = t.sousTitre;
+        document.getElementById('titreAppareils').innerHTML = t.titreAppareils;
+        document.querySelector('#ajouterAppareilBtn').innerHTML = t.btnAjouter;
+        document.getElementById('thType').innerText = t.thType;
+        document.getElementById('thNom').innerText = t.thNom;
+        document.getElementById('thPuissance').innerText = t.thPuissance;
+        document.getElementById('thQte').innerText = t.thQte;
+        document.getElementById('thHeures').innerText = t.thHeures;
+        document.getElementById('helpAppareils').innerHTML = t.helpAppareils;
+        document.getElementById('titreParams').innerHTML = t.titreParams;
+        document.getElementById('labelEnsoleillement').innerHTML = t.labelEnsoleillement;
+        document.getElementById('helpEnsoleillement').innerHTML = t.helpEnsoleillement;
+        document.getElementById('labelAutonomie').innerHTML = t.labelAutonomie;
+        document.getElementById('labelTechno').innerHTML = t.labelTechno;
+        document.getElementById('labelTension').innerHTML = t.labelTension;
+        document.getElementById('labelEfficacite').innerHTML = t.labelEfficacite;
+        document.getElementById('labelCapaciteBatterie').innerHTML = t.labelCapaciteBatterie;
+        document.getElementById('helpBatterie').innerHTML = t.helpBatterie;
+        document.getElementById('labelPrixBatterie').innerHTML = t.labelPrixBatterie;
+        document.getElementById('labelPuissancePanneau').innerHTML = t.labelPuissancePanneau;
+        document.getElementById('helpPanneau').innerHTML = t.helpPanneau;
+        document.getElementById('labelPrixPanneau').innerHTML = t.labelPrixPanneau;
+        document.getElementById('labelPrixAccessoires').innerHTML = t.labelPrixAccessoires;
+        document.getElementById('calculerBtn').innerHTML = t.btnCalc;
+        document.getElementById('titreResultats').innerHTML = t.titreResultats;
+        document.getElementById('msgInit').innerText = t.msgInit;
+        document.getElementById('exportPdfBtn').innerHTML = t.btnPdf;
+        document.getElementById('btnTraduction').innerHTML = t.btnLang;
+        document.getElementById('footerText').innerHTML = t.footer;
+    }
+    
+    // ----- Calcul principal & affichage -----
+    function dimensionnerEtDevis() {
+        const apps = getAppareils();
+        if (apps.length === 0) {
+            document.getElementById('resultatsContenu').innerHTML = `<div style="color:#b33;">⚠️ Ajoutez au moins un appareil valide.</div>`;
+            return;
+        }
+        let totalWh = 0, pSimult = 0;
+        for (let a of apps) { totalWh += a.puissance * a.quantite * a.heures; pSimult += a.puissance * a.quantite; }
+        
+        const sunH = parseFloat(document.getElementById('peakSunHours').value);
+        const autoDays = parseFloat(document.getElementById('autonomyDays').value);
+        const dod = parseFloat(document.getElementById('batteryType').value);
+        const eff = parseFloat(document.getElementById('systemEfficiency').value);
+        const volt = parseInt(document.getElementById('systemVoltage').value);
+        const batAh = getBatteryAh();
+        const panelWp = getPanelWattage();
+        const prixPan = parseFloat(document.getElementById('prixPanneau').value);
+        const prixBat = parseFloat(document.getElementById('prixBatterie').value);
+        const prixAcc = parseFloat(document.getElementById('prixAccessoires').value);
+        
+        let neededWp = Math.ceil((totalWh / eff) / sunH);
+        let nbPan = Math.max(1, Math.ceil(neededWp / panelWp));
+        let puissPanReelle = nbPan * panelWp;
+        let batWhNeeded = (totalWh * autoDays) / dod;
+        let capAhNeeded = Math.ceil((batWhNeeded / volt) * 1.05);
+        let serie = volt / 12;
+        let para = Math.ceil(capAhNeeded / batAh);
+        let totalBat = serie * para;
+        let capReelleAh = para * batAh;
+        let stockWhReel = capReelleAh * volt;
+        let onduleurMin = Math.max(300, Math.ceil(pSimult * 1.2));
+        let courantReg = Math.ceil((puissPanReelle / volt) * 1.25);
+        let typeReg = courantReg > 40 ? "MPPT recommandé" : (courantReg > 15 ? "MPPT/PWM" : "PWM");
+        let coutPan = nbPan * prixPan;
+        let coutBat = totalBat * prixBat;
+        let coutTotal = coutPan + coutBat + prixAcc;
+        
+        let tableHtml = `<table style="width:100%; font-size:0.7rem;"><thead><tr><th>Appareil</th><th>W</th><th>x</th><th>h/j</th><th>Wh/j</th></tr></thead><tbody>`;
+        for (let a of apps) {
+            let wh = a.puissance * a.quantite * a.heures;
+            tableHtml += `<tr><td>${escapeHtml(a.nom)}</td><td>${a.puissance}</td><td>${a.quantite}</td><td>${a.heures}</td><td>${wh.toFixed(0)}</td></tr>`;
+        }
+        tableHtml += `</tbody></table><div class="help-text">Total : ${totalWh.toFixed(0)} Wh/jour</div>`;
+        
+        let devisHtml = `
+            <div class="carte-resultat"><div class="badge">📋 VOS APPAREILS</div>${tableHtml}</div>
+            <div class="carte-resultat"><div class="badge">📈 CONSOMMATION</div><p>🔋 ${totalWh.toFixed(0)} Wh/jour &nbsp;|&nbsp; ⚡ ${pSimult.toFixed(0)} W max</p></div>
+            <div class="carte-resultat"><div class="badge">☀️ PANNEAUX</div><p>Puissance crête : ${neededWp} Wc → ${nbPan} x ${panelWp} Wc = <strong>${puissPanReelle} Wc</strong><br><small>${sunH} h/jour, efficacité ${(eff*100).toFixed(0)}%</small></p></div>
+            <div class="carte-resultat"><div class="badge">🔋 BATTERIES</div><p>Capacité nécessaire : ${capAhNeeded} Ah (${volt}V)<br>Configuration : ${serie} série, ${para} parallèle → <strong>${totalBat} batteries</strong> de ${batAh} Ah<br>Stockage réel : ${capReelleAh} Ah (${stockWhReel.toFixed(0)} Wh) DOD ${(dod*100).toFixed(0)}%</p></div>
+            <div class="carte-resultat"><div class="badge">💰 DEVIS (Ariary)</div><ul style="margin:0 0 8px 0; padding-left: 1rem;"><li>Panneaux : ${coutPan.toLocaleString()} Ar</li><li>Batteries : ${coutBat.toLocaleString()} Ar</li><li>Accessoires : ${prixAcc.toLocaleString()} Ar</li></ul><p style="font-weight:bold; margin:5px 0;">Total matériel : ${coutTotal.toLocaleString()} Ar</p><small>Hors transport & main d'œuvre</small></div>
+            <div class="carte-resultat"><div class="badge">⚙️ ACCESSOIRES</div><p>Onduleur ≥ ${onduleurMin} W &nbsp;•&nbsp; Régulateur ${courantReg} A (${typeReg})<br>Câbles, disjoncteurs, parafoudre.</p></div>
+            <div class="total-energie">✅ Résumé : ${nbPan} panneau(x) (${puissPanReelle} Wc) + ${totalBat} batterie(s) ${batAh}Ah + onduleur ${onduleurMin}W</div>
+            <div class="footer-uni" style="margin-top:1rem; border-top:1px solid #ccc; padding-top:0.7rem;">🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium</div>
+        `;
+        document.getElementById('resultatsContenu').innerHTML = devisHtml;
+        if (langueActuelle === 'mg') {
+            let c = document.getElementById('resultatsContenu');
+            if (c) c.innerHTML = c.innerHTML.replace(/VOS APPAREILS/g, 'IREO FITAOVANAO').replace(/CONSOMMATION/g, 'FANJIFANA').replace(/PANNEAUX/g, 'TANJAKA ILAINA').replace(/BATTERIES/g, 'BATERIA').replace(/DEVIS/g, 'VIDINY').replace(/ACCESSOIRES/g, 'KOJAKOJA').replace(/Résumé/g, 'Famintinana').replace(/Université de l'Itasy/g, 'Oniversiten\'i Itasy');
+        }
+    }
+    
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    // ----- EXPORT PDF MULTI-PAGES (CORRECTION TRONCATURE) -----
+    async function exportToPDF() {
+        const section = document.getElementById('resultatsSection');
+        if (!section) return;
+        const btn = document.getElementById('exportPdfBtn');
+        const original = btn.textContent;
+        btn.textContent = "⏳";
+        btn.disabled = true;
+        try {
+            // Cloner la section des résultats pour modification hors écran
+            const clone = section.cloneNode(true);
+            // Nettoyer les éléments inutiles pour le PDF
+            const cloneTitle = clone.querySelector('#titreResultats');
+            if (cloneTitle) cloneTitle.textContent = "📄 Devis dimensionnement solaire";
+            const cloneBtn = clone.querySelector('#exportPdfBtn');
+            if (cloneBtn) cloneBtn.remove();
+            const flexDiv = clone.querySelector('.flex-boutons');
+            if (flexDiv && cloneBtn && flexDiv.contains(cloneBtn)) flexDiv.removeChild(cloneBtn);
+            // S'assurer que le clone a une largeur fixe adaptée (éviter les débordements)
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            clone.style.top = '0';
+            clone.style.width = '500px';   // largeur fixe pour uniformiser le rendu
+            clone.style.backgroundColor = '#ffffff';
+            document.body.appendChild(clone);
+            
+            // Capturer avec html2canvas
+            const canvas = await html2canvas(clone, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: false
+            });
+            document.body.removeChild(clone);
+            
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();   // 210 mm
+            const pdfHeight = pdf.internal.pageSize.getHeight(); // 297 mm
+            
+            // Dimensions de l'image en mm (ratio)
+            const imgWidth = pdfWidth;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            let heightLeft = imgHeight;
+            let position = 0; // en mm
+            // Première page
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+            heightLeft -= pdfHeight;
+            // Ajouter des pages supplémentaires si nécessaire
+            while (heightLeft > 0) {
+                position -= pdfHeight; // décalage vers le haut
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+                heightLeft -= pdfHeight;
+            }
+            pdf.save('devis_solaire_mobile.pdf');
+        } catch(e) {
+            console.error(e);
+            alert("Erreur lors de la génération du PDF. Vérifiez votre connexion ou réessayez.");
+        } finally {
+            btn.textContent = original;
+            btn.disabled = false;
+        }
+    }
+    
+    function toggleLangue() { langueActuelle = langueActuelle === 'fr' ? 'mg' : 'fr'; traduireInterface(); dimensionnerEtDevis(); }
+    
+    document.getElementById('ajouterAppareilBtn').addEventListener('click', () => { tbody.appendChild(createRow("Lampe LED", null, 9, 1, 1)); dimensionnerEtDevis(); });
+    document.getElementById('calculerBtn').addEventListener('click', dimensionnerEtDevis);
+    document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
+    document.getElementById('btnTraduction').addEventListener('click', toggleLangue);
+    
+    initTable();
+    traduireInterface();
+    dimensionnerEtDevis();
+</script>
+</body>
+</html>
