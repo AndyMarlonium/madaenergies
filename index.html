@@ -252,7 +252,7 @@
 <body>
 <div class="container" id="mainContainer">
     <div class="flex-boutons-top">
-        <h1>🌞 Mada-Soa <small>Ariary & mobile</small></h1>
+        <h1>🌞 Solaire Madagascar <small>Ariary & mobile</small></h1>
         <button id="btnTraduction" class="btn-lang">🇲🇬 Malagasy</button>
     </div>
     <div class="sous-titre" id="sousTitre">Ajoutez vos appareils → dimensionnement complet panneaux, batteries (5Ah-300Ah) et devis en Ariary.</div>
@@ -316,6 +316,17 @@
                 <label id="labelPrixBatterie">💰 Prix unitaire batterie (Ar)</label>
                 <input type="number" id="prixBatterie" value="550000" step="10000">
             </div>
+            
+            <!-- NOUVEAU : choix type de panneau -->
+            <div class="param-groupe">
+                <label id="labelTypePanneau">🔘 Type de panneau</label>
+                <select id="panelTypeSelect" onchange="updatePanelPrice()">
+                    <option value="mono">Monocristallin (haut rendement)</option>
+                    <option value="poly">Polycristallin (économique)</option>
+                </select>
+                <div class="help-text" id="helpTypePanneau">Monocristallin : plus compact, meilleur rendement. Polycristallin : moins cher mais plus grand.</div>
+            </div>
+            
             <div class="param-groupe">
                 <label id="labelPuissancePanneau">🔌 Puissance panneau (Wc)</label>
                 <select id="panelWattageSelect" onchange="togglePanelWattage()">
@@ -324,11 +335,11 @@
                     <option value="500">500 Wc</option><option value="other">Autre</option>
                 </select>
                 <input type="number" id="panelWattageOther" style="display:none; margin-top:5px;" placeholder="Wc" value="400">
-                <div class="help-text" id="helpPanneau">Choisissez puissance disponible.</div>
             </div>
             <div class="param-groupe">
-                <label id="labelPrixPanneau">💰 Prix panneau (Ar)</label>
+                <label id="labelPrixPanneau">💰 Prix unitaire panneau (Ar)</label>
                 <input type="number" id="prixPanneau" value="350000" step="10000">
+                <div class="help-text" id="helpPrixPanneau">Le prix s'ajuste automatiquement selon le type (modifiable).</div>
             </div>
             <div class="param-groupe">
                 <label id="labelPrixAccessoires">🛠️ Forfait accessoires (Ar)</label>
@@ -354,6 +365,17 @@
 </div>
 
 <script>
+    // ----- Mise à jour du prix panneau en fonction du type -----
+    function updatePanelPrice() {
+        const type = document.getElementById('panelTypeSelect').value;
+        const prixInput = document.getElementById('prixPanneau');
+        if (type === 'mono') {
+            prixInput.value = 380000;  // prix indicatif monocristallin 400Wc
+        } else {
+            prixInput.value = 320000;  // polycristallin 400Wc
+        }
+    }
+    
     // ----- fonctions utilitaires -----
     function toggleBatteryAh() {
         const s = document.getElementById('batteryAhSelect');
@@ -378,6 +400,8 @@
     toggleBatteryAh(); togglePanelWattage();
     document.getElementById('batteryAhSelect').addEventListener('change', toggleBatteryAh);
     document.getElementById('panelWattageSelect').addEventListener('change', togglePanelWattage);
+    document.getElementById('panelTypeSelect').addEventListener('change', updatePanelPrice);
+    updatePanelPrice(); // initialisation
 
     // ----- dictionnaire des appareils -----
     const defaultApplianceMap = {
@@ -497,7 +521,8 @@
             titreParams: "⚙️ Réglages & Prix (Ar)", labelEnsoleillement: "☀️ Heures d'ensoleillement (Madagascar)", helpEnsoleillement: "Moyenne 5,2 h/jour",
             labelAutonomie: "🔋 Jours d'autonomie", labelTechno: "⚡ Technologie batterie (DOD)", labelTension: "🔧 Tension système (V)", labelEfficacite: "📉 Facteur d'efficacité",
             labelCapaciteBatterie: "🪫 Capacité batterie 12V (Ah)", helpBatterie: "De 5Ah (éclairage) à 300Ah.", labelPrixBatterie: "💰 Prix unitaire batterie (Ar)",
-            labelPuissancePanneau: "🔌 Puissance panneau (Wc)", helpPanneau: "Choisissez puissance disponible.", labelPrixPanneau: "💰 Prix panneau (Ar)",
+            labelTypePanneau: "🔘 Type de panneau", helpTypePanneau: "Monocristallin : plus compact, meilleur rendement. Polycristallin : moins cher.",
+            labelPuissancePanneau: "🔌 Puissance panneau (Wc)", labelPrixPanneau: "💰 Prix unitaire panneau (Ar)", helpPrixPanneau: "Ajustable selon le type.",
             labelPrixAccessoires: "🛠️ Forfait accessoires (Ar)", btnCalc: "📐 DIMENSIONNER & DEVIS", titreResultats: "📊 Résultats & Devis", msgInit: "⚡ Cliquez sur 'Dimensionner & Devis'.",
             btnPdf: "📑 PDF", btnLang: "🇲🇬 Malagasy", footer: "🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium"
         },
@@ -507,7 +532,8 @@
             titreParams: "⚙️ Fandrindrana sy Vidin (Ar)", labelEnsoleillement: "☀️ Ora mamirapiratra (Madagasikara)", helpEnsoleillement: "Anton-daty 5,2 ora",
             labelAutonomie: "🔋 Andro fitehirizana", labelTechno: "⚡ Karazana batterie (DOD)", labelTension: "🔧 Hery (V)", labelEfficacite: "📉 Fahombiazana",
             labelCapaciteBatterie: "🪫 Fahafahan'ny batterie 12V (Ah)", helpBatterie: "5Ah ka 300Ah.", labelPrixBatterie: "💰 Vidin'ny batterie (Ar)",
-            labelPuissancePanneau: "🔌 Herin'ny panneau (Wc)", helpPanneau: "Misafidiana hery misy.", labelPrixPanneau: "💰 Vidin'ny panneau (Ar)",
+            labelTypePanneau: "🔘 Karazana panneau", helpTypePanneau: "Monocristallin : kely kokoa, avo lenta. Polycristallin : mora kokoa.",
+            labelPuissancePanneau: "🔌 Herin'ny panneau (Wc)", labelPrixPanneau: "💰 Vidin'ny panneau (Ar)", helpPrixPanneau: "Miankina amin'ny karazana.",
             labelPrixAccessoires: "🛠️ Vidin'ny kojakoja (Ar)", btnCalc: "📐 KAJIANA", titreResultats: "📊 Valiny sy Vidiny", msgInit: "⚡ Tsindrio ny 'Kajiana'.",
             btnPdf: "📑 PDF", btnLang: "🇫🇷 Français", footer: "🌱 Oniversiten'i Itasy - Mention Energie Renouvelable - Dr Andy Marlonium"
         }
@@ -535,9 +561,11 @@
         document.getElementById('labelCapaciteBatterie').innerHTML = t.labelCapaciteBatterie;
         document.getElementById('helpBatterie').innerHTML = t.helpBatterie;
         document.getElementById('labelPrixBatterie').innerHTML = t.labelPrixBatterie;
+        document.getElementById('labelTypePanneau').innerHTML = t.labelTypePanneau;
+        document.getElementById('helpTypePanneau').innerHTML = t.helpTypePanneau;
         document.getElementById('labelPuissancePanneau').innerHTML = t.labelPuissancePanneau;
-        document.getElementById('helpPanneau').innerHTML = t.helpPanneau;
         document.getElementById('labelPrixPanneau').innerHTML = t.labelPrixPanneau;
+        document.getElementById('helpPrixPanneau').innerHTML = t.helpPrixPanneau;
         document.getElementById('labelPrixAccessoires').innerHTML = t.labelPrixAccessoires;
         document.getElementById('calculerBtn').innerHTML = t.btnCalc;
         document.getElementById('titreResultats').innerHTML = t.titreResultats;
@@ -567,6 +595,7 @@
         const prixPan = parseFloat(document.getElementById('prixPanneau').value);
         const prixBat = parseFloat(document.getElementById('prixBatterie').value);
         const prixAcc = parseFloat(document.getElementById('prixAccessoires').value);
+        const panelType = document.getElementById('panelTypeSelect').value;
         
         let neededWp = Math.ceil((totalWh / eff) / sunH);
         let nbPan = Math.max(1, Math.ceil(neededWp / panelWp));
@@ -585,6 +614,10 @@
         let coutBat = totalBat * prixBat;
         let coutTotal = coutPan + coutBat + prixAcc;
         
+        // Estimation surface (valeurs indicatives)
+        let surfaceParPanneau = (panelType === 'mono') ? 1.7 : 2.0; // m² pour 400Wc, adapté approximativement
+        let surfaceTotale = (nbPan * surfaceParPanneau * (panelWp / 400)).toFixed(1); // ajuste selon puissance
+        
         let tableHtml = `<table style="width:100%; font-size:0.7rem;"><thead><tr><th>Appareil</th><th>W</th><th>x</th><th>h/j</th><th>Wh/j</th></tr></thead><tbody>`;
         for (let a of apps) {
             let wh = a.puissance * a.quantite * a.heures;
@@ -595,17 +628,17 @@
         let devisHtml = `
             <div class="carte-resultat"><div class="badge">📋 VOS APPAREILS</div>${tableHtml}</div>
             <div class="carte-resultat"><div class="badge">📈 CONSOMMATION</div><p>🔋 ${totalWh.toFixed(0)} Wh/jour &nbsp;|&nbsp; ⚡ ${pSimult.toFixed(0)} W max</p></div>
-            <div class="carte-resultat"><div class="badge">☀️ PANNEAUX</div><p>Puissance crête : ${neededWp} Wc → ${nbPan} x ${panelWp} Wc = <strong>${puissPanReelle} Wc</strong><br><small>${sunH} h/jour, efficacité ${(eff*100).toFixed(0)}%</small></p></div>
+            <div class="carte-resultat"><div class="badge">☀️ PANNEAUX (${panelType === 'mono' ? 'Monocristallin' : 'Polycristallin'})</div><p>Puissance crête : ${neededWp} Wc → ${nbPan} x ${panelWp} Wc = <strong>${puissPanReelle} Wc</strong><br>Surface estimée : ~${surfaceTotale} m²<br><small>${sunH} h/jour, efficacité ${(eff*100).toFixed(0)}%</small></p></div>
             <div class="carte-resultat"><div class="badge">🔋 BATTERIES</div><p>Capacité nécessaire : ${capAhNeeded} Ah (${volt}V)<br>Configuration : ${serie} série, ${para} parallèle → <strong>${totalBat} batteries</strong> de ${batAh} Ah<br>Stockage réel : ${capReelleAh} Ah (${stockWhReel.toFixed(0)} Wh) DOD ${(dod*100).toFixed(0)}%</p></div>
-            <div class="carte-resultat"><div class="badge">💰 DEVIS (Ariary)</div><ul style="margin:0 0 8px 0; padding-left: 1rem;"><li>Panneaux : ${coutPan.toLocaleString()} Ar</li><li>Batteries : ${coutBat.toLocaleString()} Ar</li><li>Accessoires : ${prixAcc.toLocaleString()} Ar</li></ul><p style="font-weight:bold; margin:5px 0;">Total matériel : ${coutTotal.toLocaleString()} Ar</p><small>Hors transport & main d'œuvre</small></div>
+            <div class="carte-resultat"><div class="badge">💰 DEVIS (Ariary)</div><ul style="margin:0 0 8px 0; padding-left: 1rem;"><li>Panneaux (${nbPan}×${panelWp}Wc) : ${coutPan.toLocaleString()} Ar</li><li>Batteries (${totalBat}×${batAh}Ah) : ${coutBat.toLocaleString()} Ar</li><li>Accessoires : ${prixAcc.toLocaleString()} Ar</li></ul><p style="font-weight:bold; margin:5px 0;">Total matériel : ${coutTotal.toLocaleString()} Ar</p><small>Hors transport & main d'œuvre</small></div>
             <div class="carte-resultat"><div class="badge">⚙️ ACCESSOIRES</div><p>Onduleur ≥ ${onduleurMin} W &nbsp;•&nbsp; Régulateur ${courantReg} A (${typeReg})<br>Câbles, disjoncteurs, parafoudre.</p></div>
-            <div class="total-energie">✅ Résumé : ${nbPan} panneau(x) (${puissPanReelle} Wc) + ${totalBat} batterie(s) ${batAh}Ah + onduleur ${onduleurMin}W</div>
+            <div class="total-energie">✅ Résumé : ${nbPan} panneau(x) ${panelType === 'mono' ? 'mono' : 'poly'} (${puissPanReelle} Wc) + ${totalBat} batterie(s) ${batAh}Ah + onduleur ${onduleurMin}W</div>
             <div class="footer-uni" style="margin-top:1rem; border-top:1px solid #ccc; padding-top:0.7rem;">🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium</div>
         `;
         document.getElementById('resultatsContenu').innerHTML = devisHtml;
         if (langueActuelle === 'mg') {
             let c = document.getElementById('resultatsContenu');
-            if (c) c.innerHTML = c.innerHTML.replace(/VOS APPAREILS/g, 'IREO FITAOVANAO').replace(/CONSOMMATION/g, 'FANJIFANA').replace(/PANNEAUX/g, 'TANJAKA ILAINA').replace(/BATTERIES/g, 'BATERIA').replace(/DEVIS/g, 'VIDINY').replace(/ACCESSOIRES/g, 'KOJAKOJA').replace(/Résumé/g, 'Famintinana').replace(/Université de l'Itasy/g, 'Oniversiten\'i Itasy');
+            if (c) c.innerHTML = c.innerHTML.replace(/VOS APPAREILS/g, 'IREO FITAOVANAO').replace(/CONSOMMATION/g, 'FANJIFANA').replace(/PANNEAUX/g, 'TANJAKA ILAINA').replace(/BATTERIES/g, 'BATERIA').replace(/DEVIS/g, 'VIDINY').replace(/ACCESSOIRES/g, 'KOJAKOJA').replace(/Résumé/g, 'Famintinana').replace(/Université de l'Itasy/g, 'Oniversiten\'i Itasy').replace(/Monocristallin/g, 'Monocristallin').replace(/Polycristallin/g, 'Polycristallin');
         }
     }
     
@@ -620,62 +653,41 @@
         btn.textContent = "⏳";
         btn.disabled = true;
         try {
-            // Cloner la section des résultats pour modification hors écran
             const clone = section.cloneNode(true);
-            // Nettoyer les éléments inutiles pour le PDF
             const cloneTitle = clone.querySelector('#titreResultats');
             if (cloneTitle) cloneTitle.textContent = "📄 Devis dimensionnement solaire";
             const cloneBtn = clone.querySelector('#exportPdfBtn');
             if (cloneBtn) cloneBtn.remove();
             const flexDiv = clone.querySelector('.flex-boutons');
             if (flexDiv && cloneBtn && flexDiv.contains(cloneBtn)) flexDiv.removeChild(cloneBtn);
-            // S'assurer que le clone a une largeur fixe adaptée (éviter les débordements)
             clone.style.position = 'absolute';
             clone.style.left = '-9999px';
             clone.style.top = '0';
-            clone.style.width = '500px';   // largeur fixe pour uniformiser le rendu
+            clone.style.width = '500px';
             clone.style.backgroundColor = '#ffffff';
             document.body.appendChild(clone);
-            
-            // Capturer avec html2canvas
-            const canvas = await html2canvas(clone, {
-                scale: 2,
-                backgroundColor: '#ffffff',
-                logging: false,
-                useCORS: false
-            });
+            const canvas = await html2canvas(clone, { scale: 2, backgroundColor: '#ffffff', logging: false });
             document.body.removeChild(clone);
-            
             const imgData = canvas.toDataURL('image/png');
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();   // 210 mm
-            const pdfHeight = pdf.internal.pageSize.getHeight(); // 297 mm
-            
-            // Dimensions de l'image en mm (ratio)
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
             const imgWidth = pdfWidth;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            
             let heightLeft = imgHeight;
-            let position = 0; // en mm
-            // Première page
+            let position = 0;
             pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
             heightLeft -= pdfHeight;
-            // Ajouter des pages supplémentaires si nécessaire
             while (heightLeft > 0) {
-                position -= pdfHeight; // décalage vers le haut
+                position -= pdfHeight;
                 pdf.addPage();
                 pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
                 heightLeft -= pdfHeight;
             }
             pdf.save('devis_solaire_mobile.pdf');
-        } catch(e) {
-            console.error(e);
-            alert("Erreur lors de la génération du PDF. Vérifiez votre connexion ou réessayez.");
-        } finally {
-            btn.textContent = original;
-            btn.disabled = false;
-        }
+        } catch(e) { console.error(e); alert("Erreur PDF"); }
+        finally { btn.textContent = original; btn.disabled = false; }
     }
     
     function toggleLangue() { langueActuelle = langueActuelle === 'fr' ? 'mg' : 'fr'; traduireInterface(); dimensionnerEtDevis(); }
