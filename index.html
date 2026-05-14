@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="mg">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Dimensionneur solaire Madagascar - Mobile</title>
+    <title>Angovo Soa - Mobile</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -252,41 +252,41 @@
 <body>
 <div class="container" id="mainContainer">
     <div class="flex-boutons-top">
-        <h1>🌞 Solaire Madagascar <small>Ariary & mobile</small></h1>
-        <button id="btnTraduction" class="btn-lang">🇲🇬 Malagasy</button>
+        <h1>🌞 Angovo Soa <small>Malagasy Mandroso</small></h1>
+        <button id="btnTraduction" class="btn-lang">🇫🇷 Français</button>  <!-- Le texte sera mis à jour par JS -->
     </div>
-    <div class="sous-titre" id="sousTitre">Ajoutez vos appareils → dimensionnement complet panneaux, batteries (5Ah-300Ah) et devis en Ariary.</div>
+    <div class="sous-titre" id="sousTitre">Ampidiro ny fitaovanao → kajy panneau, batterie (5Ah-300Ah) ary vidiny amin'ny Ariary.</div>
 
     <div class="grille-panels">
         <div class="section-appareils">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <h3 id="titreAppareils">📋 Vos appareils</h3>
-                <button type="button" class="btn-ajouter" id="ajouterAppareilBtn">+ Ajouter</button>
+                <h3 id="titreAppareils">📋 Ireo fitaovanao</h3>
+                <button type="button" class="btn-ajouter" id="ajouterAppareilBtn">+ Ampiana</button>
             </div>
             <div class="table-wrapper">
                 <table id="tableAppareils">
                     <thead>
-                        <tr><th id="thType">Type</th><th id="thNom">Nom</th><th id="thPuissance">W</th><th id="thQte">Qté</th><th id="thHeures">h/j</th><th></th></tr>
+                        <tr><th id="thType">Karazana</th><th id="thNom">Anarana</th><th id="thPuissance">W</th><th id="thQte">Isany</th><th id="thHeures">ora/andro</th><th></th></tr>
                     </thead>
                     <tbody id="tbodyAppareils"></tbody>
                 </table>
             </div>
-            <div class="help-text" id="helpAppareils">💡 Choisissez un type, la puissance par défaut est proposée.</div>
+            <div class="help-text" id="helpAppareils">💡 Mifidiana karazana, hiseho ny herinaratra.</div>
         </div>
 
         <div class="section-params">
-            <h3 id="titreParams">⚙️ Réglages & Prix (Ar)</h3>
+            <h3 id="titreParams">⚙️ Fandrindrana sy Vidin (Ar)</h3>
             <div class="param-groupe">
-                <label id="labelEnsoleillement">☀️ Heures d'ensoleillement (Madagascar)</label>
+                <label id="labelEnsoleillement">☀️ Ora mamirapiratra (Madagasikara)</label>
                 <input type="number" id="peakSunHours" value="5.2" step="0.2">
-                <div class="help-text" id="helpEnsoleillement">Moyenne 5,2 h/jour</div>
+                <div class="help-text" id="helpEnsoleillement">Anton-daty 5,2 ora</div>
             </div>
             <div class="param-groupe">
-                <label id="labelAutonomie">🔋 Jours d'autonomie</label>
+                <label id="labelAutonomie">🔋 Andro fitehirizana</label>
                 <input type="number" id="autonomyDays" value="2" step="0.5" min="1">
             </div>
             <div class="param-groupe">
-                <label id="labelTechno">⚡ Technologie batterie (DOD)</label>
+                <label id="labelTechno">⚡ Karazana batterie (DOD)</label>
                 <select id="batteryType">
                     <option value="0.5">Plomb-acide 50%</option>
                     <option value="0.8" selected>Lithium 80%</option>
@@ -294,73 +294,73 @@
                 </select>
             </div>
             <div class="param-groupe">
-                <label id="labelTension">🔧 Tension système (V)</label>
+                <label id="labelTension">🔧 Hery (V)</label>
                 <select id="systemVoltage"><option value="12">12V</option><option value="24">24V</option><option value="48">48V</option></select>
             </div>
             <div class="param-groupe">
-                <label id="labelEfficacite">📉 Facteur d'efficacité</label>
+                <label id="labelEfficacite">📉 Fahombiazana</label>
                 <input type="number" id="systemEfficiency" value="0.75" step="0.01">
             </div>
             <div class="param-groupe">
-                <label id="labelCapaciteBatterie">🪫 Capacité batterie 12V (Ah)</label>
+                <label id="labelCapaciteBatterie">🪫 Fahafahan'ny batterie 12V (Ah)</label>
                 <select id="batteryAhSelect" onchange="toggleBatteryAh()">
                     <option value="5">5 Ah</option><option value="10">10 Ah</option><option value="20">20 Ah</option>
                     <option value="50">50 Ah</option><option value="100" selected>100 Ah</option><option value="150">150 Ah</option>
                     <option value="200">200 Ah</option><option value="300">300 Ah</option>
-                    <option value="other">Autre</option>
+                    <option value="other">Hafa</option>
                 </select>
                 <input type="number" id="batteryAhOther" style="display:none; margin-top:5px;" placeholder="Capacité (Ah)" value="100">
-                <div class="help-text" id="helpBatterie">De 5Ah (éclairage) à 300Ah.</div>
+                <div class="help-text" id="helpBatterie">5Ah ka 300Ah.</div>
             </div>
             <div class="param-groupe">
-                <label id="labelPrixBatterie">💰 Prix unitaire batterie (Ar)</label>
+                <label id="labelPrixBatterie">💰 Vidin'ny batterie (Ar)</label>
                 <input type="number" id="prixBatterie" value="550000" step="10000">
             </div>
             
-            <!-- NOUVEAU : choix type de panneau -->
+            <!-- Choix type de panneau -->
             <div class="param-groupe">
-                <label id="labelTypePanneau">🔘 Type de panneau</label>
+                <label id="labelTypePanneau">🔘 Karazana panneau</label>
                 <select id="panelTypeSelect" onchange="updatePanelPrice()">
                     <option value="mono">Monocristallin (haut rendement)</option>
-                    <option value="poly">Polycristallin (économique)</option>
+                    <option value="poly">Polycristallin (mora kokoa)</option>
                 </select>
-                <div class="help-text" id="helpTypePanneau">Monocristallin : plus compact, meilleur rendement. Polycristallin : moins cher mais plus grand.</div>
+                <div class="help-text" id="helpTypePanneau">Monocristallin : kely kokoa, avo lenta. Polycristallin : mora kokoa.</div>
             </div>
             
             <div class="param-groupe">
-                <label id="labelPuissancePanneau">🔌 Puissance panneau (Wc)</label>
+                <label id="labelPuissancePanneau">🔌 Herin'ny panneau (Wc)</label>
                 <select id="panelWattageSelect" onchange="togglePanelWattage()">
                     <option value="100">100 Wc</option><option value="150">150 Wc</option><option value="250">250 Wc</option>
                     <option value="300">300 Wc</option><option value="400" selected>400 Wc</option><option value="450">450 Wc</option>
-                    <option value="500">500 Wc</option><option value="other">Autre</option>
+                    <option value="500">500 Wc</option><option value="other">Hafa</option>
                 </select>
                 <input type="number" id="panelWattageOther" style="display:none; margin-top:5px;" placeholder="Wc" value="400">
             </div>
             <div class="param-groupe">
-                <label id="labelPrixPanneau">💰 Prix unitaire panneau (Ar)</label>
-                <input type="number" id="prixPanneau" value="350000" step="10000">
-                <div class="help-text" id="helpPrixPanneau">Le prix s'ajuste automatiquement selon le type (modifiable).</div>
+                <label id="labelPrixPanneau">💰 Vidin'ny panneau (Ar)</label>
+                <input type="number" id="prixPanneau" value="380000" step="10000">
+                <div class="help-text" id="helpPrixPanneau">Miankina amin'ny karazana.</div>
             </div>
             <div class="param-groupe">
-                <label id="labelPrixAccessoires">🛠️ Forfait accessoires (Ar)</label>
+                <label id="labelPrixAccessoires">🛠️ Vidin'ny kojakoja (Ar)</label>
                 <input type="number" id="prixAccessoires" value="0" step="50000">
             </div>
-            <button id="calculerBtn" class="btn-calc">📐 DIMENSIONNER & DEVIS</button>
+            <button id="calculerBtn" class="btn-calc">📐 KAJIANA</button>
         </div>
     </div>
 
     <div id="resultatsSection" class="section-resultats" style="margin-top: 1.2rem;">
         <div class="flex-boutons">
-            <h3 id="titreResultats" style="margin:0; font-size:1rem;">📊 Résultats & Devis</h3>
+            <h3 id="titreResultats" style="margin:0; font-size:1rem;">📊 Valiny sy Vidiny</h3>
             <button id="exportPdfBtn" class="btn-pdf">📑 PDF</button>
         </div>
         <div id="resultatsContenu" class="carte-resultat">
-            <p id="msgInit">⚡ Cliquez sur "Dimensionner & Devis".</p>
+            <p id="msgInit">⚡ Tsindrio ny "Kajiana".</p>
         </div>
     </div>
 
     <div class="footer-uni" id="footerText">
-        🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium
+        Oniversiten'i Itasy - Dr Andy Marlonium - Mention Energie Renouvelable
     </div>
 </div>
 
@@ -433,7 +433,7 @@
         const tdName = document.createElement('td');
         const nameInput = document.createElement('input');
         nameInput.type = "text";
-        nameInput.placeholder = "Nom";
+        nameInput.placeholder = "Anarana";
         nameInput.className = "app-name";
         let dispName = (customName !== null && customName !== "") ? customName : defaultApplianceMap[selectedType]?.name || selectedType;
         nameInput.value = dispName;
@@ -512,8 +512,8 @@
         return arr;
     }
     
-    // ----- Traduction (Français/Malgache) -----
-    let langueActuelle = 'fr';
+    // ----- Traduction (Malagasy par défaut, puis Français) -----
+    let langueActuelle = 'mg';  // Changement : langue par défaut = malgache
     const dict = {
         fr: {
             sousTitre: "Ajoutez vos appareils → panneaux, batteries (5Ah-300Ah) et devis en Ariary.",
@@ -524,18 +524,18 @@
             labelTypePanneau: "🔘 Type de panneau", helpTypePanneau: "Monocristallin : plus compact, meilleur rendement. Polycristallin : moins cher.",
             labelPuissancePanneau: "🔌 Puissance panneau (Wc)", labelPrixPanneau: "💰 Prix unitaire panneau (Ar)", helpPrixPanneau: "Ajustable selon le type.",
             labelPrixAccessoires: "🛠️ Forfait accessoires (Ar)", btnCalc: "📐 DIMENSIONNER & DEVIS", titreResultats: "📊 Résultats & Devis", msgInit: "⚡ Cliquez sur 'Dimensionner & Devis'.",
-            btnPdf: "📑 PDF", btnLang: "🇲🇬 Malagasy", footer: "🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium"
+            btnPdf: "📑 PDF", btnLang: "🇲🇬 Malagasy", footer: "Université de l'Itasy - Dr Andy Marlonium - Mention Energie Renouvelable"
         },
         mg: {
             sousTitre: "Ampidiro ny fitaovana → kajy panneau, batterie (5Ah-300Ah) ary vidiny amin'ny Ariary.",
             titreAppareils: "📋 Ireo fitaovanao", btnAjouter: "+ Ampiana", thType: "Karazana", thNom: "Anarana", thPuissance: "W", thQte: "Isany", thHeures: "ora/andro", helpAppareils: "💡 Mifidiana karazana, hiseho ny herinaratra.",
-            titreParams: "⚙️ Fandrindrana sy Vidin (Ar)", labelEnsoleillement: "☀️ Ora mamirapiratra (Madagasikara)", helpEnsoleillement: "Anton-daty 5,2 ora",
+            titreParams: "⚙️ Fandrindrana sy Vidiny (Ar)", labelEnsoleillement: "☀️ Ora mamirapiratra (Madagasikara)", helpEnsoleillement: "Anton-daty 5,2 ora",
             labelAutonomie: "🔋 Andro fitehirizana", labelTechno: "⚡ Karazana batterie (DOD)", labelTension: "🔧 Hery (V)", labelEfficacite: "📉 Fahombiazana",
             labelCapaciteBatterie: "🪫 Fahafahan'ny batterie 12V (Ah)", helpBatterie: "5Ah ka 300Ah.", labelPrixBatterie: "💰 Vidin'ny batterie (Ar)",
             labelTypePanneau: "🔘 Karazana panneau", helpTypePanneau: "Monocristallin : kely kokoa, avo lenta. Polycristallin : mora kokoa.",
             labelPuissancePanneau: "🔌 Herin'ny panneau (Wc)", labelPrixPanneau: "💰 Vidin'ny panneau (Ar)", helpPrixPanneau: "Miankina amin'ny karazana.",
             labelPrixAccessoires: "🛠️ Vidin'ny kojakoja (Ar)", btnCalc: "📐 KAJIANA", titreResultats: "📊 Valiny sy Vidiny", msgInit: "⚡ Tsindrio ny 'Kajiana'.",
-            btnPdf: "📑 PDF", btnLang: "🇫🇷 Français", footer: "🌱 Oniversiten'i Itasy - Mention Energie Renouvelable - Dr Andy Marlonium"
+            btnPdf: "📑 PDF", btnLang: "🇫🇷 Français", footer: "Oniversiten'i Itasy - Dr Andy Marlonium - Mention Energie Renouvelable"
         }
     };
     
@@ -579,7 +579,7 @@
     function dimensionnerEtDevis() {
         const apps = getAppareils();
         if (apps.length === 0) {
-            document.getElementById('resultatsContenu').innerHTML = `<div style="color:#b33;">⚠️ Ajoutez au moins un appareil valide.</div>`;
+            document.getElementById('resultatsContenu').innerHTML = `<div style="color:#b33;">⚠️ Ampiana fitaovana iray farafahakeliny.</div>`;
             return;
         }
         let totalWh = 0, pSimult = 0;
@@ -614,37 +614,36 @@
         let coutBat = totalBat * prixBat;
         let coutTotal = coutPan + coutBat + prixAcc;
         
-        // Estimation surface (valeurs indicatives)
-        let surfaceParPanneau = (panelType === 'mono') ? 1.7 : 2.0; // m² pour 400Wc, adapté approximativement
-        let surfaceTotale = (nbPan * surfaceParPanneau * (panelWp / 400)).toFixed(1); // ajuste selon puissance
+        let surfaceParPanneau = (panelType === 'mono') ? 1.7 : 2.0;
+        let surfaceTotale = (nbPan * surfaceParPanneau * (panelWp / 400)).toFixed(1);
         
         let tableHtml = `<table style="width:100%; font-size:0.7rem;"><thead><tr><th>Appareil</th><th>W</th><th>x</th><th>h/j</th><th>Wh/j</th></tr></thead><tbody>`;
         for (let a of apps) {
             let wh = a.puissance * a.quantite * a.heures;
-            tableHtml += `<tr><td>${escapeHtml(a.nom)}</td><td>${a.puissance}</td><td>${a.quantite}</td><td>${a.heures}</td><td>${wh.toFixed(0)}</td></tr>`;
+            tableHtml += `<tr><td>${escapeHtml(a.nom)}</td><td>${a.puissance}</td><td>${a.quantite}</td><td>${a.heures}</td><td>${wh.toFixed(0)}<\/td></td>`;
         }
         tableHtml += `</tbody></table><div class="help-text">Total : ${totalWh.toFixed(0)} Wh/jour</div>`;
         
         let devisHtml = `
-            <div class="carte-resultat"><div class="badge">📋 VOS APPAREILS</div>${tableHtml}</div>
-            <div class="carte-resultat"><div class="badge">📈 CONSOMMATION</div><p>🔋 ${totalWh.toFixed(0)} Wh/jour &nbsp;|&nbsp; ⚡ ${pSimult.toFixed(0)} W max</p></div>
-            <div class="carte-resultat"><div class="badge">☀️ PANNEAUX (${panelType === 'mono' ? 'Monocristallin' : 'Polycristallin'})</div><p>Puissance crête : ${neededWp} Wc → ${nbPan} x ${panelWp} Wc = <strong>${puissPanReelle} Wc</strong><br>Surface estimée : ~${surfaceTotale} m²<br><small>${sunH} h/jour, efficacité ${(eff*100).toFixed(0)}%</small></p></div>
-            <div class="carte-resultat"><div class="badge">🔋 BATTERIES</div><p>Capacité nécessaire : ${capAhNeeded} Ah (${volt}V)<br>Configuration : ${serie} série, ${para} parallèle → <strong>${totalBat} batteries</strong> de ${batAh} Ah<br>Stockage réel : ${capReelleAh} Ah (${stockWhReel.toFixed(0)} Wh) DOD ${(dod*100).toFixed(0)}%</p></div>
-            <div class="carte-resultat"><div class="badge">💰 DEVIS (Ariary)</div><ul style="margin:0 0 8px 0; padding-left: 1rem;"><li>Panneaux (${nbPan}×${panelWp}Wc) : ${coutPan.toLocaleString()} Ar</li><li>Batteries (${totalBat}×${batAh}Ah) : ${coutBat.toLocaleString()} Ar</li><li>Accessoires : ${prixAcc.toLocaleString()} Ar</li></ul><p style="font-weight:bold; margin:5px 0;">Total matériel : ${coutTotal.toLocaleString()} Ar</p><small>Hors transport & main d'œuvre</small></div>
-            <div class="carte-resultat"><div class="badge">⚙️ ACCESSOIRES</div><p>Onduleur ≥ ${onduleurMin} W &nbsp;•&nbsp; Régulateur ${courantReg} A (${typeReg})<br>Câbles, disjoncteurs, parafoudre.</p></div>
-            <div class="total-energie">✅ Résumé : ${nbPan} panneau(x) ${panelType === 'mono' ? 'mono' : 'poly'} (${puissPanReelle} Wc) + ${totalBat} batterie(s) ${batAh}Ah + onduleur ${onduleurMin}W</div>
-            <div class="footer-uni" style="margin-top:1rem; border-top:1px solid #ccc; padding-top:0.7rem;">🌱 Université de l'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium</div>
+            <div class="carte-resultat"><div class="badge">📋 ${langueActuelle === 'fr' ? 'VOS APPAREILS' : 'IREO FITAOVANAO'}</div>${tableHtml}</div>
+            <div class="carte-resultat"><div class="badge">📈 ${langueActuelle === 'fr' ? 'CONSOMMATION' : 'FANJIFANA'}</div><p>🔋 ${totalWh.toFixed(0)} Wh/jour &nbsp;|&nbsp; ⚡ ${pSimult.toFixed(0)} W max</p></div>
+            <div class="carte-resultat"><div class="badge">☀️ ${langueActuelle === 'fr' ? 'PANNEAUX' : 'TANJAKA ILAINA'} (${panelType === 'mono' ? (langueActuelle === 'fr' ? 'Monocristallin' : 'Monocristallin') : (langueActuelle === 'fr' ? 'Polycristallin' : 'Polycristallin')})</div>
+            <p>Puissance crête : ${neededWp} Wc → ${nbPan} x ${panelWp} Wc = <strong>${puissPanReelle} Wc</strong><br>${langueActuelle === 'fr' ? 'Surface estimée' : 'Velarantany'} : ~${surfaceTotale} m²<br><small>${sunH} h/jour, efficacité ${(eff*100).toFixed(0)}%</small></p></div>
+            <div class="carte-resultat"><div class="badge">🔋 ${langueActuelle === 'fr' ? 'BATTERIES' : 'BATERIA'}</div>
+            <p>${langueActuelle === 'fr' ? 'Capacité nécessaire' : 'Tanjaka ilaina'} : ${capAhNeeded} Ah (${volt}V)<br>${langueActuelle === 'fr' ? 'Configuration' : 'Fandaminana'} : ${serie} série, ${para} parallèle → <strong>${totalBat} batteries</strong> de ${batAh} Ah<br>${langueActuelle === 'fr' ? 'Stockage réel' : 'Fitehirizan-tena'} : ${capReelleAh} Ah (${stockWhReel.toFixed(0)} Wh) DOD ${(dod*100).toFixed(0)}%</p></div>
+            <div class="carte-resultat"><div class="badge">💰 ${langueActuelle === 'fr' ? 'DEVIS (Ariary)' : 'VIDINY (Ariary)'}</div>
+            <ul style="margin:0 0 8px 0; padding-left: 1rem;"><li>Panneaux (${nbPan}×${panelWp}Wc) : ${coutPan.toLocaleString()} Ar</li><li>Batteries (${totalBat}×${batAh}Ah) : ${coutBat.toLocaleString()} Ar</li><li>Accessoires : ${prixAcc.toLocaleString()} Ar</li></ul><p style="font-weight:bold; margin:5px 0;">Total matériel : ${coutTotal.toLocaleString()} Ar</p><small>Hors transport & main d'œuvre</small></div>
+            <div class="carte-resultat"><div class="badge">⚙️ ${langueActuelle === 'fr' ? 'ACCESSOIRES' : 'KOJAKOJA'}</div>
+            <p>Onduleur ≥ ${onduleurMin} W &nbsp;•&nbsp; Régulateur ${courantReg} A (${typeReg})<br>Câbles, disjoncteurs, parafoudre.</p></div>
+            <div class="total-energie">✅ ${langueActuelle === 'fr' ? 'Résumé' : 'Famintinana'} : ${nbPan} panneau(x) ${panelType === 'mono' ? 'mono' : 'poly'} (${puissPanReelle} Wc) + ${totalBat} batterie(s) ${batAh}Ah + onduleur ${onduleurMin}W</div>
+            <div class="footer-uni" style="margin-top:1rem; border-top:1px solid #ccc; padding-top:0.7rem;">🌱 ${langueActuelle === 'fr' ? 'Université de l\'Itasy - Mention Energie Renouvelable - Dr Andy Marlonium' : 'Oniversiten\'i Itasy - Mention Energie Renouvelable - Dr Andy Marlonium'}</div>
         `;
         document.getElementById('resultatsContenu').innerHTML = devisHtml;
-        if (langueActuelle === 'mg') {
-            let c = document.getElementById('resultatsContenu');
-            if (c) c.innerHTML = c.innerHTML.replace(/VOS APPAREILS/g, 'IREO FITAOVANAO').replace(/CONSOMMATION/g, 'FANJIFANA').replace(/PANNEAUX/g, 'TANJAKA ILAINA').replace(/BATTERIES/g, 'BATERIA').replace(/DEVIS/g, 'VIDINY').replace(/ACCESSOIRES/g, 'KOJAKOJA').replace(/Résumé/g, 'Famintinana').replace(/Université de l'Itasy/g, 'Oniversiten\'i Itasy').replace(/Monocristallin/g, 'Monocristallin').replace(/Polycristallin/g, 'Polycristallin');
-        }
     }
     
     function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
     
-    // ----- EXPORT PDF MULTI-PAGES (CORRECTION TRONCATURE) -----
+    // ----- EXPORT PDF MULTI-PAGES -----
     async function exportToPDF() {
         const section = document.getElementById('resultatsSection');
         if (!section) return;
@@ -690,7 +689,11 @@
         finally { btn.textContent = original; btn.disabled = false; }
     }
     
-    function toggleLangue() { langueActuelle = langueActuelle === 'fr' ? 'mg' : 'fr'; traduireInterface(); dimensionnerEtDevis(); }
+    function toggleLangue() { 
+        langueActuelle = langueActuelle === 'fr' ? 'mg' : 'fr'; 
+        traduireInterface(); 
+        dimensionnerEtDevis(); 
+    }
     
     document.getElementById('ajouterAppareilBtn').addEventListener('click', () => { tbody.appendChild(createRow("Lampe LED", null, 9, 1, 1)); dimensionnerEtDevis(); });
     document.getElementById('calculerBtn').addEventListener('click', dimensionnerEtDevis);
@@ -698,8 +701,8 @@
     document.getElementById('btnTraduction').addEventListener('click', toggleLangue);
     
     initTable();
-    traduireInterface();
-    dimensionnerEtDevis();
+    traduireInterface();   // Applique la langue mg par défaut
+    dimensionnerEtDevis(); // Calcule et affiche en mg
 </script>
 </body>
 </html>
